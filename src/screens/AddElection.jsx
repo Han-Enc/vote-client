@@ -33,7 +33,9 @@ export default function AddElection({ color = 'primary' }) {
   const [open2, setOpen2] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [buttonLabel, setButtonLabel] = useState('Add Election');
-  const [inputFields, setInputFields] = useState([{ candidateName: '' }]);
+  const [inputFields, setInputFields] = useState([
+    { candidateName: '', candidateImageURL: '' },
+  ]);
 
   const handleForm = async (event) => {
     event.preventDefault();
@@ -70,7 +72,7 @@ export default function AddElection({ color = 'primary' }) {
       setCandidates([]);
       setCandidatesImageURLs([]);
       setVoters([]);
-      setInputFields([{ candidateName: '' }]);
+      setInputFields([{ candidateName: '', candidateImageURL: '' }]);
     } catch (error) {
       console.log(error);
       setOpen2(true);
@@ -90,7 +92,10 @@ export default function AddElection({ color = 'primary' }) {
   };
 
   const handleAddField = () => {
-    setInputFields([...inputFields, { candidateName: '' }]);
+    setInputFields([
+      ...inputFields,
+      { candidateName: '', candidateImageURL: '' },
+    ]);
   };
 
   const handleRemoveField = (index) => {
@@ -106,9 +111,11 @@ export default function AddElection({ color = 'primary' }) {
   useEffect(() => {
     const getCandidateNames = () => {
       let names = inputFields.map((a) => a.candidateName);
-
+      let urls = inputFields.map((a) => a.candidateImageURL);
       setCandidates(names.filter((e) => e));
+      setCandidatesImageURLs(urls.filter((e) => e));
       names = [];
+      urls = [];
     };
     getCandidateNames();
   }, [inputFields]);
@@ -184,7 +191,22 @@ export default function AddElection({ color = 'primary' }) {
                       helperText={!inputField.candidateName ? 'Required' : ''}
                     />
                   </Grid>
-
+                  <Grid item xs={12} md={5} pr={2}>
+                    <TextField
+                      className="textarea"
+                      id="outlined-basic"
+                      required
+                      label="Candidate Image URL"
+                      name="candidateImageURL"
+                      variant="outlined"
+                      value={inputField.candidateImageURL}
+                      onChange={(event) => handleChangeInput(index, event)}
+                      fullWidth
+                      helperText={
+                        !inputField.candidateImageURL ? 'Required' : ''
+                      }
+                    />
+                  </Grid>
                   <Grid item md={1} pt={2} pr={2}>
                     <Button
                       size="small"
